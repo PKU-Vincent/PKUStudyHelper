@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-使用实例：
+使用示例：
 c = Course('学号', '密码', verify=False(若需要))
 c.get_all_classes()  # 获取所有课程名和链接
 p = Portal('学号', '密码', verify=False(若需要))
