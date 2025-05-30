@@ -1,18 +1,26 @@
-#include"homepage.h"
+#include "homepage.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QFont>
+#include <QDebug>
+#include <QTimer>
+#include <QDateTime>
+#include <QMenu>
+#include<QLabel>
+#include <QAction>
 
-HomePage::HomePage(const QString& username, QWidget *parent) : QWidget(parent) {
+HomePage::HomePage(const QString& username, const QList<task>& tasks, QWidget *parent) : QWidget(parent) {
+    allTasks = tasks;
+
     // 主垂直布局（欢迎语 + 内容区域）
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(20);  // 设置部件间距
     mainLayout->setContentsMargins(20, 20, 20, 20);  // 设置边距
 
     // 欢迎语区域
-    QTextBrowser *greetingBrowser = new QTextBrowser(this);
+    greetingBrowser = new QTextBrowser(this);
     greetingBrowser->setText(getGreetingText(username) + "\n" + getRandomQuote());
     greetingBrowser->setStyleSheet(
         "font-family: 'Microsoft YaHei', sans-serif;"
@@ -67,7 +75,7 @@ HomePage::HomePage(const QString& username, QWidget *parent) : QWidget(parent) {
     courseTable->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 不可编辑
     courseLayout->addWidget(courseTable);
 
-    QPushButton *viewScheduleButton = new QPushButton("查看完整课程表", this);
+    viewScheduleButton = new QPushButton("查看完整课程表", this);
     viewScheduleButton->setStyleSheet(
         "QPushButton {"
         "    font-family: 'Microsoft YaHei', sans-serif;"
@@ -107,7 +115,7 @@ HomePage::HomePage(const QString& username, QWidget *parent) : QWidget(parent) {
         );
     taskLayout->addWidget(ddlLabel);
 
-    QTableWidget *ddlTable = new QTableWidget(3, 3, this);
+    ddlTable = new QTableWidget(0, 3, this);
     ddlTable->setHorizontalHeaderLabels({"截止时间", "任务", "状态"});
     ddlTable->setStyleSheet(
         "QTableWidget {"
@@ -139,8 +147,8 @@ HomePage::HomePage(const QString& username, QWidget *parent) : QWidget(parent) {
         );
     taskLayout->addWidget(todoLabel);
 
-    QListWidget *todoList = new QListWidget(this);
-    todoList->setStyleSheet(
+    todayTasksList = new QListWidget(this);
+    todayTasksList->setStyleSheet(
         "QListWidget {"
         "    font-family: 'Microsoft YaHei', sans-serif;"
         "    font-size: 14px;"
@@ -155,7 +163,24 @@ HomePage::HomePage(const QString& username, QWidget *parent) : QWidget(parent) {
         "    background-color: #d9edf7;"
         "}"
         );
-    taskLayout->addWidget(todoList);
+    taskLayout->addWidget(todayTasksList);
+
+    // 设置任务列表和 DDL 表格
+    setupTaskList(tasks);
+    setupDDLTable(tasks);
+
+    // 连接右键菜单信号
+    todayTasksList->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(todayTasksList, &QListWidget::customContextMenuRequested, this, &HomePage::showContextMenu);
+
+    // 为 DDL 表格设置右键菜单
+    ddlTable->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ddlTable, &QTableWidget::customContextMenuRequested, this, &HomePage::showDDLContextMenu);
+
+    // 定时更新 DDL 状态
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &HomePage::updateDDLStatus);
+    timer->start(60 * 1000); // 每分钟更新一次
 
     setLayout(mainLayout);
 }
@@ -193,4 +218,160 @@ QString HomePage::getRandomQuote() {
 
 void HomePage::handleCourseClicked(QListWidgetItem* item) {
     if (item) emit courseClicked(item->text());
+}
+
+void HomePage::handleTaskFinished(QListWidgetItem* item) {
+    if (!item) return;
+    QString taskName = item->text();
+    for (auto& t : allTasks) {
+        if (t.taskname == taskName) {
+            t.markAsFinished();
+            break;
+        }
+    }
+
+    // 划上横线
+    QFont font = item->font();
+    font.setStrikeOut(true);
+    item->setFont(font);
+
+    // 移动到列表末尾
+    QListWidgetItem *movedItem = todayTasksList->takeItem(todayTasksList->row(item));
+    todayTasksList->addItem(movedItem);
+
+    // 更新 DDL 表格
+    for (int i = 0; i < ddlTable->rowCount(); ++i) {
+        if (ddlTable->item(i, 1)->text() == taskName) {
+            QFont ddlFont = ddlTable->item(i, 1)->font();
+            ddlFont.setStrikeOut(true);
+            ddlTable->item(i, 1)->setFont(ddlFont);
+            ddlTable->item(i, 2)->setText("已完成");
+            break;
+        }
+    }
+}
+
+void HomePage::showContextMenu(const QPoint &pos) {
+    QListWidgetItem *item = todayTasksList->itemAt(pos);
+    if (!item) return;
+
+    QMenu contextMenu(this);
+    QAction *finishAction = contextMenu.addAction("已完成");
+    QAction *selectedAction = contextMenu.exec(todayTasksList->mapToGlobal(pos));
+
+    if (selectedAction == finishAction) {
+        handleTaskFinished(item);
+    }
+}
+
+void HomePage::setupTaskList(const QList<task>& tasks) {
+    for (const auto& t : tasks) {
+        if (!t.is_ddl) {
+            QListWidgetItem *item = new QListWidgetItem(t.taskname, todayTasksList);
+            if (t.isFinished()) {
+                QFont font = item->font();
+                font.setStrikeOut(true);
+                item->setFont(font);
+            }
+        }
+    }
+}
+
+void HomePage::setupDDLTable(const QList<task>& tasks) {
+    ddlTable->setRowCount(0);
+    for (const auto& t : tasks) {
+        if (t.is_ddl) {
+            int row = ddlTable->rowCount();
+            ddlTable->insertRow(row);
+            ddlTable->setItem(row, 0, new QTableWidgetItem(t.ddl));
+            QTableWidgetItem *taskItem = new QTableWidgetItem(t.taskname);
+            if (t.isFinished()) {
+                QFont font = taskItem->font();
+                font.setStrikeOut(true);
+                taskItem->setFont(font);
+            }
+            ddlTable->setItem(row, 1, taskItem);
+            int days = t.daysToDDL();
+            QString status;
+            if (days == 0) {
+                status = "今天截止！";
+            } else if (days > 0 && days <= 3) {
+                status = "三天内截止";
+            } else if (days > 3 && days <= 7) {
+                status = "一周内截止";
+            } else if (days > 7) {
+                status = "当前良好";
+            } else {
+                status = "已过期";
+            }
+            ddlTable->setItem(row, 2, new QTableWidgetItem(status));
+        }
+    }
+}
+
+void HomePage::updateDDLStatus() {
+    for (int i = 0; i < ddlTable->rowCount(); ++i) {
+        if (!ddlTable->item(i, 1) || ddlTable->item(i, 1)->text() == "已完成")
+            continue;
+
+        QString taskName = ddlTable->item(i, 1)->text();
+        for (const auto& t : allTasks) {
+            if (t.taskname == taskName) {
+                int days = t.daysToDDL();
+                QString status;
+                if (days == 0) {
+                    status = "今天截止！";
+                } else if (days > 0 && days <= 3) {
+                    status = "三天内截止";
+                } else if (days > 3 && days <= 7) {
+                    status = "一周内截止";
+                } else if (days > 7) {
+                    status = "当前良好";
+                } else {
+                    status = "已过期";
+                }
+                ddlTable->item(i, 2)->setText(status);
+                break;
+            }
+        }
+    }
+}
+
+void HomePage::showDDLContextMenu(const QPoint &pos) {
+    QModelIndex index = ddlTable->indexAt(pos);
+    if (!index.isValid()) return;
+
+    QMenu contextMenu(this);
+    QAction *finishAction = contextMenu.addAction("已完成");
+    QAction *selectedAction = contextMenu.exec(ddlTable->mapToGlobal(pos));
+
+    if (selectedAction == finishAction) {
+        QString taskName = ddlTable->item(index.row(), 1)->text();
+
+        // 更新任务状态
+        for (auto& t : allTasks) {
+            if (t.taskname == taskName && t.is_ddl) {
+                t.markAsFinished();
+                break;
+            }
+        }
+
+        // 更新UI显示
+        QFont font = ddlTable->item(index.row(), 1)->font();
+        font.setStrikeOut(true);
+        ddlTable->item(index.row(), 1)->setFont(font);
+        ddlTable->item(index.row(), 2)->setText("已完成");
+
+        // 移动到表格底部
+        QTableWidgetItem *item0 = ddlTable->takeItem(index.row(), 0);
+        QTableWidgetItem *item1 = ddlTable->takeItem(index.row(), 1);
+        QTableWidgetItem *item2 = ddlTable->takeItem(index.row(), 2);
+
+        ddlTable->removeRow(index.row());
+        int newRow = ddlTable->rowCount();
+        ddlTable->insertRow(newRow);
+        ddlTable->setItem(newRow, 0, item0);
+        ddlTable->setItem(newRow, 1, item1);
+        ddlTable->setItem(newRow, 2, item2);
+    }
 }

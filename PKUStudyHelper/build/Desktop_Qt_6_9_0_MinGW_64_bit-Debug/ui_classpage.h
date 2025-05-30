@@ -25,10 +25,10 @@ QT_BEGIN_NAMESPACE
 class Ui_ClassPage
 {
 public:
-    QLabel *label;
+    QLabel *classname;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
-    QLabel *label_2;
+    QLabel *time;
     QLabel *location;
     QPushButton *viewmore;
     QPushButton *pushButton;
@@ -40,7 +40,7 @@ public:
     QScrollArea *scrollArea_2;
     QWidget *scrollAreaWidgetContents_2;
     QTableWidget *tableWidget_2;
-    QTextEdit *textEdit;
+    QTextEdit *tip;
     QLabel *label_5;
 
     void setupUi(QWidget *ClassPage)
@@ -48,20 +48,20 @@ public:
         if (ClassPage->objectName().isEmpty())
             ClassPage->setObjectName("ClassPage");
         ClassPage->resize(1057, 684);
-        label = new QLabel(ClassPage);
-        label->setObjectName("label");
-        label->setGeometry(QRect(410, 0, 181, 41));
-        label->setStyleSheet(QString::fromUtf8("font: 700 22pt \"Microsoft YaHei UI\";"));
+        classname = new QLabel(ClassPage);
+        classname->setObjectName("classname");
+        classname->setGeometry(QRect(410, 0, 181, 41));
+        classname->setStyleSheet(QString::fromUtf8("font: 700 22pt \"Microsoft YaHei UI\";"));
         verticalLayoutWidget = new QWidget(ClassPage);
         verticalLayoutWidget->setObjectName("verticalLayoutWidget");
         verticalLayoutWidget->setGeometry(QRect(20, 60, 331, 181));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        label_2 = new QLabel(verticalLayoutWidget);
-        label_2->setObjectName("label_2");
+        time = new QLabel(verticalLayoutWidget);
+        time->setObjectName("time");
 
-        verticalLayout->addWidget(label_2);
+        verticalLayout->addWidget(time);
 
         location = new QLabel(verticalLayoutWidget);
         location->setObjectName("location");
@@ -104,9 +104,9 @@ public:
         tableWidget_2->setObjectName("tableWidget_2");
         tableWidget_2->setGeometry(QRect(0, 0, 501, 381));
         scrollArea_2->setWidget(scrollAreaWidgetContents_2);
-        textEdit = new QTextEdit(ClassPage);
-        textEdit->setObjectName("textEdit");
-        textEdit->setGeometry(QRect(610, 90, 421, 141));
+        tip = new QTextEdit(ClassPage);
+        tip->setObjectName("tip");
+        tip->setGeometry(QRect(610, 90, 421, 141));
         label_5 = new QLabel(ClassPage);
         label_5->setObjectName("label_5");
         label_5->setGeometry(QRect(790, 51, 71, 20));
@@ -119,14 +119,14 @@ public:
     void retranslateUi(QWidget *ClassPage)
     {
         ClassPage->setWindowTitle(QCoreApplication::translate("ClassPage", "Form", nullptr));
-        label->setText(QCoreApplication::translate("ClassPage", "\350\257\276\347\250\213\345\220\215\347\247\260", nullptr));
-        label_2->setText(QCoreApplication::translate("ClassPage", "\344\270\212\350\257\276\346\227\266\351\227\264\357\274\232", nullptr));
+        classname->setText(QCoreApplication::translate("ClassPage", "\350\257\276\347\250\213\345\220\215\347\247\260", nullptr));
+        time->setText(QCoreApplication::translate("ClassPage", "\344\270\212\350\257\276\346\227\266\351\227\264\357\274\232", nullptr));
         location->setText(QCoreApplication::translate("ClassPage", "\344\270\212\350\257\276\345\234\260\347\202\271\357\274\232", nullptr));
         viewmore->setText(QCoreApplication::translate("ClassPage", "\346\237\245\347\234\213\346\233\264\345\244\232\350\257\276\347\250\213\344\277\241\346\201\257", nullptr));
         pushButton->setText(QCoreApplication::translate("ClassPage", "\347\202\271\346\210\221\345\277\253\351\200\237\350\277\233\345\205\245\346\225\231\345\255\246\347\275\221", nullptr));
         label_3->setText(QCoreApplication::translate("ClassPage", "\346\210\221\347\232\204\347\254\224\350\256\260", nullptr));
         label_4->setText(QCoreApplication::translate("ClassPage", "\346\210\221\347\232\204\344\275\234\344\270\232", nullptr));
-        textEdit->setHtml(QCoreApplication::translate("ClassPage", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        tip->setHtml(QCoreApplication::translate("ClassPage", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"

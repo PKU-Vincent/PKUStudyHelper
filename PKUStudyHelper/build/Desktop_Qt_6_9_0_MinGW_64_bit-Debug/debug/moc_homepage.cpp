@@ -45,7 +45,12 @@ template <> constexpr inline auto HomePage::qt_create_metaobjectdata<qt_meta_tag
         "courseName",
         "handleCourseClicked",
         "QListWidgetItem*",
-        "item"
+        "item",
+        "handleTaskFinished",
+        "showContextMenu",
+        "pos",
+        "showDDLContextMenu",
+        "updateDDLStatus"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -57,6 +62,20 @@ template <> constexpr inline auto HomePage::qt_create_metaobjectdata<qt_meta_tag
         QtMocHelpers::SlotData<void(QListWidgetItem *)>(4, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { 0x80000000 | 5, 6 },
         }}),
+        // Slot 'handleTaskFinished'
+        QtMocHelpers::SlotData<void(QListWidgetItem *)>(7, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 5, 6 },
+        }}),
+        // Slot 'showContextMenu'
+        QtMocHelpers::SlotData<void(const QPoint &)>(8, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QPoint, 9 },
+        }}),
+        // Slot 'showDDLContextMenu'
+        QtMocHelpers::SlotData<void(const QPoint &)>(10, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QPoint, 9 },
+        }}),
+        // Slot 'updateDDLStatus'
+        QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -82,6 +101,10 @@ void HomePage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         switch (_id) {
         case 0: _t->courseClicked((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 1: _t->handleCourseClicked((*reinterpret_cast< std::add_pointer_t<QListWidgetItem*>>(_a[1]))); break;
+        case 2: _t->handleTaskFinished((*reinterpret_cast< std::add_pointer_t<QListWidgetItem*>>(_a[1]))); break;
+        case 3: _t->showContextMenu((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
+        case 4: _t->showDDLContextMenu((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
+        case 5: _t->updateDDLStatus(); break;
         default: ;
         }
     }
@@ -110,14 +133,14 @@ int HomePage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 6;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 6)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 6;
     }
     return _id;
 }

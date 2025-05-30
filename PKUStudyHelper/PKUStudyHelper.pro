@@ -15,6 +15,7 @@ SOURCES += \
     logindialog.cpp \
     main.cpp \
     mainwindow.cpp \
+    my_task.cpp \
     notepage_md.cpp \
     notepage_text.cpp \
     setnewclass.cpp
@@ -28,6 +29,7 @@ HEADERS += \
     homepage.h \
     logindialog.h \
     mainwindow.h \
+    my_task.h \
     notepage_md.h \
     notepage_text.h \
     setnewclass.h
@@ -38,6 +40,7 @@ FORMS += \
     homepage.ui \
     logindialog.ui \
     mainwindow.ui \
+    my_task.ui \
     notepage_md.ui \
     notepage_text.ui \
     setnewclass.ui

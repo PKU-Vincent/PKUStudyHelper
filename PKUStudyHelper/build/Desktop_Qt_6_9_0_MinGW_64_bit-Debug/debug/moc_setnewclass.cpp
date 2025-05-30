@@ -41,17 +41,27 @@ template <> constexpr inline auto SetNewClass::qt_create_metaobjectdata<qt_meta_
         "SetNewClass",
         "courseCreated",
         "",
-        "courseName",
-        "on_confirmButton_clicked"
+        "coursename",
+        "newCourseCreated",
+        "Course",
+        "course",
+        "on_confirmButton_clicked",
+        "on_cancelButton_clicked"
     };
 
     QtMocHelpers::UintData qt_methods {
         // Signal 'courseCreated'
-        QtMocHelpers::SignalData<void(const QString &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+        QtMocHelpers::SignalData<void(const QString)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::QString, 3 },
         }}),
+        // Signal 'newCourseCreated'
+        QtMocHelpers::SignalData<void(const Course &)>(4, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 5, 6 },
+        }}),
         // Slot 'on_confirmButton_clicked'
-        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_cancelButton_clicked'
+        QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -76,12 +86,16 @@ void SetNewClass::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->courseCreated((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 1: _t->on_confirmButton_clicked(); break;
+        case 1: _t->newCourseCreated((*reinterpret_cast< std::add_pointer_t<Course>>(_a[1]))); break;
+        case 2: _t->on_confirmButton_clicked(); break;
+        case 3: _t->on_cancelButton_clicked(); break;
         default: ;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
-        if (QtMocHelpers::indexOfMethod<void (SetNewClass::*)(const QString & )>(_a, &SetNewClass::courseCreated, 0))
+        if (QtMocHelpers::indexOfMethod<void (SetNewClass::*)(const QString )>(_a, &SetNewClass::courseCreated, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (SetNewClass::*)(const Course & )>(_a, &SetNewClass::newCourseCreated, 1))
             return;
     }
 }
@@ -105,21 +119,27 @@ int SetNewClass::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 4;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 4;
     }
     return _id;
 }
 
 // SIGNAL 0
-void SetNewClass::courseCreated(const QString & _t1)
+void SetNewClass::courseCreated(const QString _t1)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1);
+}
+
+// SIGNAL 1
+void SetNewClass::newCourseCreated(const Course & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 1, nullptr, _t1);
 }
 QT_WARNING_POP

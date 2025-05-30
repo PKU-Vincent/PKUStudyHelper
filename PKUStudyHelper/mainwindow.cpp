@@ -8,6 +8,7 @@
 #include <QListWidgetItem>
 #include <QMenu>
 #include <QAction>
+#include "Task.h"  // 确保包含任务类定义
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
@@ -54,10 +55,19 @@ void MainWindow::setupUI() {
 
     // 页面切换区域
     stackedWidget = new QStackedWidget(this);
-    HomePage *homePage = new HomePage("小北", this);
+
+    // 初始化任务数据
+    QList<task> tasks;
+    tasks.append(task("完成作业", "2024-05-31", true, "2024-06-02"));
+    tasks.append(task("阅读书籍", "2024-05-31", false));
+    tasks.append(task("提交报告", "2024-05-31", true, "2024-06-05"));
+
+    // 创建主页并传入任务数据
+    HomePage *homePage = new HomePage("小北", tasks, this);
     connect(homePage, &HomePage::courseClicked, this, &MainWindow::handleCourseClicked);
     stackedWidget->addWidget(homePage); // index 0
 
+    // 创建其他页面
     QWidget *taskPage = new QWidget(this);
     QLabel *taskLabel = new QLabel("这是任务主页", taskPage);
     QVBoxLayout *taskLayout = new QVBoxLayout(taskPage);
@@ -66,8 +76,8 @@ void MainWindow::setupUI() {
 
     mainLayout->addWidget(navWidget);
     mainLayout->addWidget(stackedWidget);
-    mainLayout->setStretch(0,0);
-    mainLayout->setStretch(1,1);
+    mainLayout->setStretch(0, 0);
+    mainLayout->setStretch(1, 1);
     setCentralWidget(central);
 
     connect(navList, &QListWidget::currentRowChanged, this, &MainWindow::handleNavigation);
@@ -76,6 +86,13 @@ void MainWindow::setupUI() {
     // 右键菜单删除
     navList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(navList, &QListWidget::customContextMenuRequested, this, &MainWindow::showContextMenu);
+}
+
+void MainWindow::showAddCoursePage() {
+    SetNewClass *setNewClassWidget = new SetNewClass(this);
+    connect(setNewClassWidget, &SetNewClass::courseCreated, this, &MainWindow::handleCourseClicked);
+    stackedWidget->addWidget(setNewClassWidget);
+    stackedWidget->setCurrentWidget(setNewClassWidget);
 }
 
 void MainWindow::handleNavigation(int index) {
@@ -92,6 +109,7 @@ void MainWindow::handleNavigation(int index) {
         }
     }
 }
+
 
 void MainWindow::handleCourseClicked(const QString &courseName) {
     QWidget *coursePage = new QWidget(this);
@@ -132,9 +150,4 @@ void MainWindow::showContextMenu(const QPoint &pos) {
     }
 }
 
-void MainWindow::showAddCoursePage() {
-    SetNewClass *setNewClassWidget = new SetNewClass(this);
-    connect(setNewClassWidget, &SetNewClass::courseCreated, this, &MainWindow::handleCourseClicked);
-    stackedWidget->addWidget(setNewClassWidget);
-    stackedWidget->setCurrentWidget(setNewClassWidget);
-}
+

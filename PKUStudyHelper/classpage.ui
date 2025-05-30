@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="classname">
    <property name="geometry">
     <rect>
      <x>410</x>
@@ -40,7 +40,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="time">
       <property name="text">
        <string>上课时间：</string>
       </property>
@@ -167,7 +167,7 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QTextEdit" name="textEdit">
+  <widget class="QTextEdit" name="tip">
    <property name="geometry">
     <rect>
      <x>610</x>

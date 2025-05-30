@@ -2,6 +2,7 @@
 #define SETNEWCLASS_H
 
 #include <QWidget>
+#include"CourseInfo.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SetNewClass; }
@@ -16,10 +17,12 @@ public:
     ~SetNewClass();
 
 signals:
-    void courseCreated(const QString &courseName);
+    void courseCreated(const QString coursename);
+    void newCourseCreated(const Course& course);
 
 private slots:
     void on_confirmButton_clicked();
+    void on_cancelButton_clicked();
 
 private:
     Ui::SetNewClass *ui;
