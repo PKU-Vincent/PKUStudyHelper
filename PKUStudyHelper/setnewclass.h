@@ -3,9 +3,9 @@
 
 #include <QWidget>
 
-namespace Ui {
-class SetNewClass;
-}
+QT_BEGIN_NAMESPACE
+namespace Ui { class SetNewClass; }
+QT_END_NAMESPACE
 
 class SetNewClass : public QWidget
 {
@@ -14,6 +14,12 @@ class SetNewClass : public QWidget
 public:
     explicit SetNewClass(QWidget *parent = nullptr);
     ~SetNewClass();
+
+signals:
+    void courseCreated(const QString &courseName);
+
+private slots:
+    void on_confirmButton_clicked();
 
 private:
     Ui::SetNewClass *ui;

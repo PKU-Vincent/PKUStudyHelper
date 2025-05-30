@@ -2,21 +2,33 @@
 #define HOMEPAGE_H
 
 #include <QWidget>
+#include <QLabel>
+#include <QTextBrowser>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QListWidget>
+#include <QDateTime>
+#include<QTime>
 
-namespace Ui {
-class Homepage;
-}
-
-class Homepage : public QWidget
-{
+class HomePage : public QWidget {
     Q_OBJECT
 
 public:
-    explicit Homepage(QWidget *parent = nullptr);
-    ~Homepage();
+    explicit HomePage(const QString& username, QWidget *parent = nullptr);
+
+signals:
+    void courseClicked(const QString& courseName);
+
+private slots:
+    void handleCourseClicked(QListWidgetItem* item);
 
 private:
-    Ui::Homepage *ui;
-};
+    QString getGreetingText(const QString& username);
+    QString getRandomQuote();
 
+    QTextBrowser *greetingBrowser;
+    QPushButton *viewScheduleButton;
+    QListWidget *todayCoursesList;
+    QListWidget *todayTasksList;
+};
 #endif // HOMEPAGE_H
