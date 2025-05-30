@@ -62,8 +62,13 @@ public:
         new QTreeWidgetItem(__qtreewidgetitem);
         new QTreeWidgetItem(treeWidget);
         treeWidget->setObjectName("treeWidget");
-        treeWidget->setStyleSheet(QString::fromUtf8("font: 10pt \"Microsoft YaHei UI\";\n"
-""));
+        treeWidget->setStyleSheet(QString::fromUtf8(" font-family: \"\345\276\256\350\275\257\351\233\205\351\273\221\"; /* \345\217\257\346\215\242\345\205\266\344\273\226\345\226\234\346\254\242\347\232\204\345\255\227\344\275\223\357\274\214\345\246\202 \"Arial\" \347\255\211 */\n"
+"    font-size: 12pt; /* \350\260\203\346\225\264\345\255\227\344\275\223\345\244\247\345\260\217 */\n"
+"    color: #333333; /* \350\260\203\346\225\264\345\255\227\344\275\223\351\242\234\350\211\262 */\n"
+"QTreeWidget::item {\n"
+"    padding-top: 15px;\n"
+"    padding-bottom: 15px;\n"
+"}"));
         splitter->addWidget(treeWidget);
         stackedWidget = new QStackedWidget(splitter);
         stackedWidget->setObjectName("stackedWidget");

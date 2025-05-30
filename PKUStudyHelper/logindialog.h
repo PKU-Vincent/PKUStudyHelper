@@ -3,8 +3,10 @@
 
 #include <QDialog>
 #include "ui_logindialog.h"
-#include<QMap>
 #include<UserInfo.h>
+#include<QSqlDatabase>
+#include<QSqlQuery>
+#include<QSqlError>
 
 class Register;//前置声明
 
@@ -28,8 +30,6 @@ private slots:
 
 private:
     Ui::LoginDialog *ui;
-    QMap<QString,User> userDatabase;
-    void initUserDatabase();
 };
 
 #endif // LOGINDIALOG_H

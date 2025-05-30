@@ -41,8 +41,13 @@
     </property>
     <widget class="QTreeWidget" name="treeWidget">
      <property name="styleSheet">
-      <string notr="true">font: 10pt &quot;Microsoft YaHei UI&quot;;
-</string>
+      <string notr="true"> font-family: &quot;微软雅黑&quot;; /* 可换其他喜欢的字体，如 &quot;Arial&quot; 等 */
+    font-size: 12pt; /* 调整字体大小 */
+    color: #333333; /* 调整字体颜色 */
+QTreeWidget::item {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}</string>
      </property>
      <column>
       <property name="text">

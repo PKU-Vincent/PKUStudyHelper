@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
-    <height>382</height>
+    <width>780</width>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@ border-color: rgb(0, 0, 0);</string>
   <widget class="QLabel" name="welcome">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>20</x>
      <y>40</y>
      <width>381</width>
      <height>41</height>
@@ -37,8 +37,8 @@ color: rgb(255, 12, 57);</string>
   <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>120</y>
+     <x>10</x>
+     <y>110</y>
      <width>371</width>
      <height>141</height>
     </rect>
@@ -46,6 +46,9 @@ color: rgb(255, 12, 57);</string>
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QLabel" name="label1">
+      <property name="styleSheet">
+       <string notr="true">font: 700 10pt &quot;Microsoft YaHei UI&quot;;</string>
+      </property>
       <property name="text">
        <string>     账号：</string>
       </property>
@@ -53,6 +56,9 @@ color: rgb(255, 12, 57);</string>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label2">
+      <property name="styleSheet">
+       <string notr="true">font: 700 10pt &quot;Microsoft YaHei UI&quot;;</string>
+      </property>
       <property name="text">
        <string>     密码：</string>
       </property>
@@ -69,13 +75,13 @@ color: rgb(255, 12, 57);</string>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>250</y>
+     <x>50</x>
+     <y>260</y>
      <width>285</width>
      <height>91</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
     <property name="spacing">
      <number>14</number>
     </property>
@@ -86,14 +92,51 @@ color: rgb(255, 12, 57);</string>
      <number>0</number>
     </property>
     <item>
-     <widget class="QPushButton" name="loginbutton">
+     <widget class="QPushButton" name="loginButton">
+      <property name="styleSheet">
+       <string notr="true">
+            background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgba(255, 0, 150, 204), stop:1 rgba(0, 204, 255, 204));
+            
+font: 700 9pt &quot;Microsoft YaHei UI&quot;;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 10px 20px;
+            letter-spacing: 1.5px;
+      </string>
+      </property>
       <property name="text">
        <string>登录</string>
       </property>
      </widget>
     </item>
     <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
      <widget class="QPushButton" name="registerbutton">
+      <property name="styleSheet">
+       <string notr="true">
+            background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgba(255, 0, 150, 204), stop:1 rgba(0, 204, 255, 204));
+            
+font: 700 9pt &quot;Microsoft YaHei UI&quot;;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 10px 20px;
+            letter-spacing: 1.5px;
+      </string>
+      </property>
       <property name="text">
        <string>注册</string>
       </property>
@@ -104,14 +147,31 @@ color: rgb(255, 12, 57);</string>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>330</y>
+     <x>90</x>
+     <y>370</y>
      <width>241</width>
      <height>51</height>
     </rect>
    </property>
    <property name="text">
-    <string>message</string>
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_image">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>-20</y>
+     <width>391</width>
+     <height>551</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image:url(:/new/prefix1/boyata.image);
+</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>
