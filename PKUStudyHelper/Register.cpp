@@ -64,15 +64,6 @@ void Register::on_confirmButton_clicked()
     if (query.exec()) {
         ui->message->setText("注册成功");
         ui->message->setStyleSheet("color:green;");
-
-        int userId = query.lastInsertId().toInt();
-        User user(username, account, password);
-        if (user.saveToDatabase(userId)) {
-            qDebug() << "用户信息保存成功：" << user.username;
-        } else {
-            qDebug() << "用户信息保存失败";
-        }
-
         emit registerSuccess();
         accept();
     } else {

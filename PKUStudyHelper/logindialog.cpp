@@ -3,8 +3,10 @@
 #include"Register.h"
 #include<QDebug>
 #include<QGraphicsDropShadowEffect>
+#include<UserInfo.h>
 
 extern QSqlDatabase db;
+extern User current_user;
 
 LoginDialog::LoginDialog(QWidget *parent)
     : QDialog(parent)
@@ -64,7 +66,9 @@ void LoginDialog::on_loginButton_clicked()
                 // 登录成功
                 ui->label->setText("登录成功");
                 ui->label->setStyleSheet("color:green;");
-                accept();
+                current_user.account=account;
+                current_user.password=password;
+                    accept();
             } else {
                 // 密码错误
                 ui->label->setText("密码错误");
@@ -83,4 +87,3 @@ void LoginDialog::on_register_success()
     ui->label->setText("注册成功，请登录");
     ui->label->setStyleSheet("color:green;");
 }
-

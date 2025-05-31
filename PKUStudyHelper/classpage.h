@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "CourseInfo.h"
+#include<QVector>
 
 namespace Ui {
 class ClassPage;
@@ -15,9 +16,7 @@ class ClassPage : public QWidget
 public:
     explicit ClassPage(QWidget *parent = nullptr);
     ~ClassPage();
-
-    void setCourseInfo(const Course& course);
-
+    void setCourseInfo(const QVector<CourseInfo>& course);
 private:
     Ui::ClassPage *ui;
 };

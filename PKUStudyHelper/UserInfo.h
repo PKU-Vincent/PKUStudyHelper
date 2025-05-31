@@ -11,11 +11,12 @@ public:
     QString username;
     QString account;
     QString password;
-    QList<Course> courses;
+    QList<CourseInfo> courses;
     QList<task> tasks;
     QList<task> ddls;
     User(QString n,QString a,QString p):username(n),account(a),password(p){}
-    ~User();
+    User(){}
+    ~User(){};
 };
 
 #endif // USERINFO_H

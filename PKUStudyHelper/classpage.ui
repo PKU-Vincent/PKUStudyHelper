@@ -29,39 +29,6 @@
     <string>课程名称</string>
    </property>
   </widget>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>60</y>
-     <width>331</width>
-     <height>181</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="time">
-      <property name="text">
-       <string>上课时间：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="location">
-      <property name="text">
-       <string>上课地点：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="viewmore">
-      <property name="text">
-       <string>查看更多课程信息</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
@@ -176,6 +143,10 @@
      <height>141</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+   </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -199,6 +170,68 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="text">
     <string>小黑板</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>341</width>
+     <height>181</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>上课时间</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="parity">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="time">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>上课地点</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="classroom">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="detail">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

@@ -1,12 +1,16 @@
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QListWidget>
 #include <QStackedWidget>
+#include<QCoreApplication>
+#include<QProcess>
+#include<QJsonDocument>
+#include<QJsonObject>
+#include<QJsonArray>
 #include "Task.h"
-#include"CourseInfo.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,17 +24,16 @@ public:
     ~MainWindow(){};
 
 private slots:
-    void handleNavigation(int index);
-    void handleCourseClicked(const QString &courseName);
     void showContextMenu(const QPoint &pos);
-    void showAddCoursePage();
 private:
     void setupUI();
-    Course* getCourseByName(const QString& courseName);
     Ui::MainWindow *ui;
     QListWidget *navList;
     QStackedWidget *stackedWidget;
-    QList<task> tasks;  // 新增：存储所有任务
+    QList<task> tasks;
+    void updateScheduleUI(QJsonObject scheduleData);
+    QJsonObject getScheduleFromPython(const QString& studentId, const QString& password);
+    QVector<QMap<QString, QString>> jsonObjectToScheduleEntries(const QJsonObject& jsonObj);
 };
 
 #endif // MAINWINDOW_H

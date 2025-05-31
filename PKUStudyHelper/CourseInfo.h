@@ -1,21 +1,32 @@
 #ifndef COURSEINFO_H
 #define COURSEINFO_H
-#include<QString>
 
-class Course{
-public:
-    QString coursename;
-    QString term;
-    int credit;
-    QString teachername;
-    QString teachingbuilding;
-    QString classroom;
-    QString day;
-    QString time;
-    QString weeks;
-    QString tcontact;
-    QString atcontact;
-    QString tips;
+#include <QCoreApplication>
+#include <QDebug>
+#include <QMap>
+#include <QVector>
+#include <QString>
+#include <QRegularExpression>
+#include <algorithm>
+#include<QSet>
+
+struct CourseInfo {
+    QString name;
+    QString weekday;
+    QVector<QString> periods;
+    QString detail;
 };
 
-#endif // COURSEINFO_H
+struct ParsedScheduleResult {
+    QMap<QString, QVector<CourseInfo>> name_index;
+    QMap<QString, QVector<CourseInfo>> time_index;
+    QVector<QString> name_list;
+};
+
+// 仅保留函数声明
+int parseStartPeriod(const QString& periodStr);
+QString mergePeriods(const QVector<QString>& periods);
+QVector<CourseInfo> parseSchedule(const QVector<QMap<QString, QString>>& scheduleEntries);
+ParsedScheduleResult parseAndCategorizeSchedule(const QVector<QMap<QString, QString>>& scheduleEntries);
+
+#endif

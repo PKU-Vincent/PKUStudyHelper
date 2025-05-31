@@ -11,6 +11,7 @@
 #include<QLabel>
 #include <QAction>
 
+
 HomePage::HomePage(const QString& username, const QList<task>& tasks, QWidget *parent) : QWidget(parent) {
     allTasks = tasks;
 

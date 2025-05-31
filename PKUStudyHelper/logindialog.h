@@ -1,12 +1,11 @@
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
-
 #include <QDialog>
 #include "ui_logindialog.h"
-#include<UserInfo.h>
 #include<QSqlDatabase>
 #include<QSqlQuery>
 #include<QSqlError>
+#include<QDebug>
 
 class Register;//前置声明
 
@@ -21,6 +20,7 @@ class LoginDialog : public QDialog
 public:
     explicit LoginDialog(QWidget *parent = nullptr);
     ~LoginDialog();
+
 
 private slots:
     void on_registerButton_clicked();//处理注册按钮点击事件

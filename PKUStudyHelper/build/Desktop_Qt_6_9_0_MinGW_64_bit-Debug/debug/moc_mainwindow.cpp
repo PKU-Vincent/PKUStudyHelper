@@ -39,31 +39,16 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "MainWindow",
-        "handleNavigation",
-        "",
-        "index",
-        "handleCourseClicked",
-        "courseName",
         "showContextMenu",
-        "pos",
-        "showAddCoursePage"
+        "",
+        "pos"
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'handleNavigation'
-        QtMocHelpers::SlotData<void(int)>(1, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { QMetaType::Int, 3 },
-        }}),
-        // Slot 'handleCourseClicked'
-        QtMocHelpers::SlotData<void(const QString &)>(4, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { QMetaType::QString, 5 },
-        }}),
         // Slot 'showContextMenu'
-        QtMocHelpers::SlotData<void(const QPoint &)>(6, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { QMetaType::QPoint, 7 },
+        QtMocHelpers::SlotData<void(const QPoint &)>(1, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QPoint, 3 },
         }}),
-        // Slot 'showAddCoursePage'
-        QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -87,10 +72,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     auto *_t = static_cast<MainWindow *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->handleNavigation((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 1: _t->handleCourseClicked((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 2: _t->showContextMenu((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
-        case 3: _t->showAddCoursePage(); break;
+        case 0: _t->showContextMenu((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
         default: ;
         }
     }
@@ -115,14 +97,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 1)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 1;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 1)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 1;
     }
     return _id;
 }
