@@ -24,7 +24,7 @@ public:
     ~MainWindow(){};
 
 private slots:
-    void showContextMenu(const QPoint &pos);
+    void on_item_clicked(QListWidgetItem *item);
 private:
     void setupUI();
     Ui::MainWindow *ui;

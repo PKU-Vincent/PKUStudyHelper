@@ -39,15 +39,16 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "MainWindow",
-        "showContextMenu",
+        "on_item_clicked",
         "",
-        "pos"
+        "QListWidgetItem*",
+        "item"
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'showContextMenu'
-        QtMocHelpers::SlotData<void(const QPoint &)>(1, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { QMetaType::QPoint, 3 },
+        // Slot 'on_item_clicked'
+        QtMocHelpers::SlotData<void(QListWidgetItem *)>(1, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 3, 4 },
         }}),
     };
     QtMocHelpers::UintData qt_properties {
@@ -72,7 +73,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     auto *_t = static_cast<MainWindow *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->showContextMenu((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
+        case 0: _t->on_item_clicked((*reinterpret_cast< std::add_pointer_t<QListWidgetItem*>>(_a[1]))); break;
         default: ;
         }
     }

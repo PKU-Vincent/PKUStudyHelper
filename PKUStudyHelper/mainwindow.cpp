@@ -46,10 +46,7 @@ void MainWindow::setupUI() {
     navList->addItem("我的主页");
     navList->addItem("我的任务");
     navList->addItem("我的课程");
-
-    navLayout->addWidget(navList);
-    navLayout->addStretch();
-    navWidget->setFixedWidth(180);
+    connect(navList,&QListWidget::itemClicked,this,&MainWindow::on_item_clicked);
 
     // 页面切换区域
     stackedWidget = new QStackedWidget(this);
@@ -71,6 +68,10 @@ void MainWindow::setupUI() {
     taskLayout->addWidget(taskLabel);
     stackedWidget->addWidget(taskPage); // index 1
 
+    QWidget *coursepage=new QWidget(this);
+    QLabel *courseLabel=new QLabel("这是课程主页",coursepage);
+    stackedWidget->addWidget(coursepage);
+
     QJsonObject scheduleData=getScheduleFromPython(current_user.account,current_user.password);
     if (scheduleData.contains("error")) {
         qDebug() << "Login failed:" << scheduleData["error"].toString();
@@ -88,7 +89,15 @@ void MainWindow::setupUI() {
         coursewidgets.append(w);
         w->setCourseInfo(result.name_index[result.name_list[i]]);
         stackedWidget->addWidget(w);//index i+2
+        QListWidgetItem *courseItem=new QListWidgetItem("   "+result.name_list[i]);
+        QFont addFont;
+        addFont.setPointSize(10);
+        courseItem->setFont(addFont);
+        navList->addItem(courseItem);
     }
+    navLayout->addWidget(navList);
+    navLayout->addStretch();
+    navWidget->setFixedWidth(180);
 
     mainLayout->addWidget(navWidget);
     mainLayout->addWidget(stackedWidget);
@@ -99,24 +108,11 @@ void MainWindow::setupUI() {
 
 }
 
-void MainWindow::showContextMenu(const QPoint &pos) {
-    QListWidgetItem *item = navList->itemAt(pos);
-    if (!item || item->text() == "我的主页" || item->text() == "我的任务" || item->text() == "我的课程" || item->text() == "+ 添加课程")
-        return;
 
-    QMenu contextMenu;
-    QAction *deleteAction = contextMenu.addAction("删除课程");
-    QAction *selectedAction = contextMenu.exec(navList->mapToGlobal(pos));
-
-    if (selectedAction == deleteAction) {
-        int row = navList->row(item);
-        navList->takeItem(row);
-        int pageIndex = stackedWidget->currentIndex();
-        QWidget *widget = stackedWidget->widget(pageIndex);
-        stackedWidget->removeWidget(widget);
-        widget->deleteLater();
-        navList->setCurrentRow(0); // 返回主页
-    }
+void MainWindow::on_item_clicked(QListWidgetItem *item)
+{
+    int index=navList->row(item);
+    stackedWidget->setCurrentIndex(index);
 }
 
 QJsonObject MainWindow::getScheduleFromPython(const QString& studentId, const QString& password) {
