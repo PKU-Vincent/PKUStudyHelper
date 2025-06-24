@@ -4,7 +4,7 @@
 c = Course('学号', '密码', verify=False(若需要))
 c.get_all_classes()  # 获取所有课程名和链接
 p = Portal('学号', '密码', verify=False(若需要))
-c.get_schedule()  # 获取课表，门户的返回格式有些奇怪，需要进一步处理
+c.get_schedule()  # 获取课表
 c.get_GPA()  # 获取GPA
 c.deepseek('问题')  # 使用门户的 DeepSeek 功能
 '''
@@ -30,7 +30,7 @@ class Course:
     "Accept-Language": "zh-CN,zh;q=0.9",
     "Connection": "keep-alive"
     }
-    def __init__(self, stu_id, password, verify=True):
+    def __init__(self, stu_id: str, password: str, verify: bool = True):
         '''
         初始化 Course 类，进行登录操作
         :param stu_id: 学号
@@ -128,7 +128,7 @@ class Portal:
     '''
     门户类。提供登录门户、获取课表、GPA、使用门户deepseek等功能
     '''
-    def __init__(self, stu_id, password, verify = True):
+    def __init__(self, stu_id: str, password: str, verify: bool = True):
         '''
         初始化 Portal 类，进行登录操作
         :param stu_id: 学号
@@ -148,12 +148,13 @@ class Portal:
         '''
         req1 = self.session.get("https://portal.pku.edu.cn/portal2017", verify=self.verify)
         req2 = self.session.get("https://portal.pku.edu.cn/portal2017/login.jsp", verify=self.verify)
-        submit_url = "https://iaaa.pku.edu.cn/iaaa/oauth.jsp?" + "&".join([
-            f"appID=portal2017",
-            f"appName={quote('北京大学校内信息门户新版')}",
-            f"redirectUrl={quote('https://portal.pku.edu.cn/portal2017/ssoLogin.do')}"
-        ])
-        req3 = self.session.get(submit_url, allow_redirects=True, verify=self.verify)
+        submit_url = "https://iaaa.pku.edu.cn/iaaa/oauth.jsp?" 
+        req3 = self.session.get(submit_url, params={
+            "appID": "portal2017",
+            "appName": "北京大学校内信息门户新版",
+            "redirectUrl": "https://portal.pku.edu.cn/portal2017/ssoLogin.do"
+        }, allow_redirects=True, verify=self.verify)
+
         data = {
             "appid": "portal2017",
             "userName": self.stu_id,
@@ -179,14 +180,17 @@ class Portal:
                                 params=data, allow_redirects=True, verify=self.verify)
     
     # 获取课表
-    def get_schedule(self) -> dict:
+    def get_schedule(self) -> dict[int,dict[int,str]]:
         '''
         获取课表
-        :return: 一个字典，包含课程信息
+        :return: 一个字典,get_schedule()[i][j]表示周i第j节的课程,i=1,2,...,7,j=1,2,...,12.
         '''
         req1 = self.session.get("https://portal.pku.edu.cn/portal2017/util/portletRedir.do?portletId=coursetable",
                                 allow_redirects=True, verify=self.verify)
-
+        if req1.status_code != 200:
+            self.login()
+            req1 = self.session.get("https://portal.pku.edu.cn/portal2017/util/portletRedir.do?portletId=myscores",
+                                allow_redirects=True, verify=self.verify)
         req2 = self.session.get("https://portal.pku.edu.cn/publicQuery/ctrl/topic/myCourseTable/getCourseInfo.do?xndxq=24-25-2",
                                 allow_redirects=True, verify=self.verify)
         if req2.history:  # 被重定向了，说明登录过期
@@ -199,7 +203,12 @@ class Portal:
         if 'course' not in j:
             raise ValueError("Failed to fetch schedule, course data not found in response.")
         course = j['course']
-        return course
+        schedule = {}
+        days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+        for i in range(1,8):
+            schedule[i] = {j+1:course[j][days[i-1]]['courseName'] for j in range(12)}
+        return schedule
+
 
     def get_GPA(self) -> str:
         '''
@@ -208,12 +217,12 @@ class Portal:
         '''
         req1 = self.session.get("https://portal.pku.edu.cn/portal2017/util/portletRedir.do?portletId=myscores",
                                 allow_redirects=True, verify=self.verify)
-
+        if req1.status_code != 200:
+            self.login()
+            req1 = self.session.get("https://portal.pku.edu.cn/portal2017/util/portletRedir.do?portletId=myscores",
+                                allow_redirects=True, verify=self.verify)
         req2 = self.session.get("https://portal.pku.edu.cn/publicQuery/ctrl/topic/myScore/retrScores.do",
                                 allow_redirects=True, verify=self.verify)
-        if req2.history:
-            self.login()
-            return self.get_GPA()
         
         j = req2.json()
         if 'success' not in j or not j['success']:
@@ -232,6 +241,10 @@ class Portal:
         :return: DeepSeek 的回答
         '''
         req1 = self.session.get("https://portal.pku.edu.cn/portal2017/util/portletRedir.do?portletId=deepseek",
+                                 allow_redirects=True, verify=self.verify)
+        if req1.status_code != 200:
+            self.login()
+            req1 = self.session.get("https://portal.pku.edu.cn/portal2017/util/portletRedir.do?portletId=deepseek",
                                  allow_redirects=True, verify=self.verify)
         req2 = self.session.get("https://deepseek.pku.edu.cn/api/trpc/chat.getUserAccessibleKnowledgeBases?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D",
                                  allow_redirects=True, verify=self.verify)
