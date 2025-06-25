@@ -14,6 +14,9 @@ from urllib3.exceptions import InsecureRequestWarning
 from urllib.parse import quote
 import json
 from bs4 import BeautifulSoup
+from datetime import datetime, time, timedelta
+import re
+from typing import Optional
 
 # 禁用所有 InsecureRequestWarning 警告
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
@@ -123,6 +126,61 @@ class Course:
         else:
             return []
         
+    def _get_timestamp(self, yyyymmdd:str) -> int:
+        """
+        获取本地时区0点的毫秒级时间戳，查看教学网日程时使用
+        :param yyyymmdd: 日期字符串，格式为 yyyymmdd (例如 20250601)
+        :return: 本地时区0点的毫秒级时间戳
+        """
+        if not re.match(r'^\d{8}$', yyyymmdd):
+            raise ValueError("日期格式必须为 yyyymmdd (例如 20250601)")
+        year = int(yyyymmdd[:4])
+        month = int(yyyymmdd[4:6])
+        day = int(yyyymmdd[6:8])
+        date_obj = datetime(year, month, day).date()
+        midnight_local = datetime.combine(date_obj, time(0, 0, 0))
+        return int(midnight_local.timestamp() * 1000)
+    
+    def get_timetable(self, start_date:Optional[str], end_date:Optional[str]) -> list[dict[str,str]]:
+        '''
+        获取教学网上的日程表
+        :param start_date: 起始日期，格式为 yyyymmdd (例如 20250601)，如果为 None，则默认为今天
+        :param end_date: 结束日期，格式为 yyyymmdd (例如 20250630)，如果为 None，则默认为起始日期后一个月
+        :return: 一个列表，每个元素是一个字典：{'time': '时间', 'title': '标题', 'link': '链接'}
+        时间的格式：'2025-06-08T23:59:00'
+        '''
+        if start_date is None:
+            start_date = datetime.now().strftime('%Y%m%d')
+        if end_date is None:
+            end_date = (datetime.now() + timedelta(days=30)).strftime('%Y%m%d')
+        
+        start_timestamp = self._get_timestamp(start_date)
+        end_timestamp = self._get_timestamp(end_date)
+
+        params = {
+            'start': str(start_timestamp),
+            'end': str(end_timestamp),
+            'course_id': '',
+            'mode': 'personal'
+        }
+
+        req = self.session.get("https://course.pku.edu.cn/webapps/calendar/calendarData/selectedCalendarEvents",
+                                params=params, allow_redirects=True, verify=self.verify)
+        if req.status_code != 200:
+            self.login()
+            return self.get_timetable(start_date, end_date)
+        res = []
+        j = req.json()
+        for element in j:
+            res.append({
+                'time': element['start'],
+                'title': element['title'],
+            })
+            r = self.session.get(f"https://course.pku.edu.cn/webapps/calendar/launch/attempt/{element['id']}",
+                                 verify=self.verify, allow_redirects=True)
+            res[-1]['url'] = r.url
+        
+        return res
 
 class Portal:
     '''
