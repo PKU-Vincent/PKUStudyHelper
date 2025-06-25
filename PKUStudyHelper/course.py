@@ -11,7 +11,6 @@ c.deepseek('问题')  # 使用门户的 DeepSeek 功能
 import requests
 import random
 from urllib3.exceptions import InsecureRequestWarning
-from urllib.parse import quote
 import json
 from bs4 import BeautifulSoup
 from datetime import datetime, time, timedelta
@@ -23,8 +22,8 @@ requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
 class Course:
     '''
-    课程信息获取类。提供登录教学网、获取教学网上课程名等功能
-    待开发：获取课程作业、公告、文件等功能；获取教学网上的日程表；获取个人成绩；......
+    教学网类。提供登录教学网、获取教学网上课程名、日程表等功能
+    待开发：获取课程作业、公告、文件等功能；获取个人成绩；......
     '''
 
     headers = {
@@ -292,13 +291,16 @@ class Portal:
         gpa = j['gpa']['gpa']
         return gpa
     
-    def deepseek(self, text: str, del_conversation: bool = True) -> str:
+    def deepseek(self, text: str, system_text: Optional[str] = None, del_conversation: bool = True) -> str:
         '''
         使用门户的 DeepSeek 功能
         :param text: 要向 DeepSeek 提问的文本
+        :param system_text: 系统提示文本，若是None，则使用默认文本
         :param del_conversation: 是否在使用后删除对话，默认为 True
         :return: DeepSeek 的回答
         '''
+        if system_text is None:
+            system_text = '你是北京大学 AI 助手，专注于为用户提供教育和学习相关的支持。\n- 仅回答学习、科学、文化、技术等正面向上的问题。\n- 不回答涉及政治、法律争议、宗教、黄赌毒、暴力、恐怖组织或恐怖活动等敏感或不适宜讨论的话题。\n- 遵循中国法律法规，立场与中国政府保持一致，提供符合主流价值观的内容。\n- 请确保回答内容积极、客观、准确，并符合青少年及公众可接受的范围。'
         req1 = self.session.get("https://portal.pku.edu.cn/portal2017/util/portletRedir.do?portletId=deepseek",
                                  allow_redirects=True, verify=self.verify)
         if req1.status_code != 200:
@@ -323,7 +325,7 @@ class Portal:
         d = {'conversation_id': conID,
              'api_key': token,
              'messages': [{'role': 'system',
-                           'content': '你是北京大学 AI 助手，专注于为用户提供教育和学习相关的支持。\n- 仅回答学习、科学、文化、技术等正面向上的问题。\n- 不回答涉及政治、法律争议、宗教、黄赌毒、暴力、恐怖组织或恐怖活动等敏感或不适宜讨论的话题。\n- 遵循中国法律法规，立场与中国政府保持一致，提供符合主流价值观的内容。\n- 请确保回答内容积极、客观、准确，并符合青少年及公众可接受的范围。'},
+                           'content': system_text},
                           {'role': 'user', 'content': text}],
              'model': 'deepseek-v3'}
         req5 = self.session.post("https://deepseek.pku.edu.cn/api/sendQuery",
