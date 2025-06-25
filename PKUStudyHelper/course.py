@@ -145,7 +145,8 @@ class Course:
         '''
         获取教学网上的日程表
         :param start_date: 起始日期，格式为 yyyymmdd (例如 20250601)，如果为 None，则默认为今天
-        :param end_date: 结束日期，格式为 yyyymmdd (例如 20250630)，如果为 None，则默认为起始日期后一个月
+        :param end_date: 结束日期，格式为 yyyymmdd (例如 20250701)，如果为 None，则默认为起始日期后一个月
+        时间是左闭右开的，查询的日程表不含end_date当天的日程，例如查询2025年6月的日程，则start_date='20250601',end_date='20250701'
         :return: 一个列表，每个元素是一个字典：{'time': '时间', 'title': '标题', 'link': '链接'}
         时间的格式：'2025-06-08T23:59:00'
         '''
@@ -165,7 +166,7 @@ class Course:
         }
 
         req = self.session.get("https://course.pku.edu.cn/webapps/calendar/calendarData/selectedCalendarEvents",
-                                params=params, allow_redirects=True, verify=self.verify)
+                               params=params, allow_redirects=True, verify=self.verify)
         if req.status_code != 200:
             self.login()
             return self.get_timetable(start_date, end_date)
