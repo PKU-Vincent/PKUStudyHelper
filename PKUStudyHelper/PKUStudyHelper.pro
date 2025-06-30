@@ -9,39 +9,37 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    CourseInfo.cpp \
+    MiniTaskPage.cpp \
     Register.cpp \
+    TaskPage.cpp \
     classpage.cpp \
+    coursepagetemplate.cpp \
+    crawler.cpp \
     homepage.cpp \
     logindialog.cpp \
     main.cpp \
-    mainwindow.cpp \
-    my_task.cpp \
-    notepage_md.cpp \
-    notepage_text.cpp
+    mainwindow.cpp
 
 HEADERS += \
-    CourseInfo.h \
+    MiniTaskPage.h \
     Register.h \
-    Task.h \
+    TaskPage.h \
     UserInfo.h \
     classpage.h \
+    coursepagetemplate.h \
+    crawler.h \
     homepage.h \
     logindialog.h \
-    mainwindow.h \
-    my_task.h \
-    notepage_md.h \
-    notepage_text.h
+    mainwindow.h
 
 FORMS += \
     Register.ui \
+    TaskPage.ui \
     classpage.ui \
+    coursepagetemplate.ui \
     homepage.ui \
     logindialog.ui \
-    mainwindow.ui \
-    my_task.ui \
-    notepage_md.ui \
-    notepage_text.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

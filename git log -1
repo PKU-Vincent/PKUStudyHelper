@@ -1,0 +1,52 @@
+[33mcommit fd35d89b25cb73d9aea25781c3c7842f50aa618a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Wenbin Hu <18079071627@163.com>
+Date:   Thu May 29 19:46:56 2025 +0800
+
+    Add files via upload
+
+A	PKUStudyHelper/CourseInfo.h
+A	PKUStudyHelper/PKUStudyHelper.pro
+A	PKUStudyHelper/Task.h
+A	PKUStudyHelper/UserInfo.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_classpage.cpp
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_homepage.cpp
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_logindialog.cpp
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_mainwindow.cpp
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_notepage_md.cpp
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_notepage_text.cpp
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_predefs.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_register.cpp
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/debug/moc_setnewclass.cpp
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/ui_classpage.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/ui_homepage.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/ui_logindialog.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/ui_mainwindow.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/ui_notepage_md.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/ui_notepage_text.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/ui_register.h
+A	PKUStudyHelper/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/ui_setnewclass.h
+A	PKUStudyHelper/classpage.cpp
+A	PKUStudyHelper/classpage.h
+A	PKUStudyHelper/classpage.ui
+A	PKUStudyHelper/homepage.cpp
+A	PKUStudyHelper/homepage.h
+A	PKUStudyHelper/homepage.ui
+A	PKUStudyHelper/logindialog.cpp
+A	PKUStudyHelper/logindialog.h
+A	PKUStudyHelper/logindialog.ui
+A	PKUStudyHelper/main.cpp
+A	PKUStudyHelper/mainwindow.cpp
+A	PKUStudyHelper/mainwindow.h
+A	PKUStudyHelper/mainwindow.ui
+A	PKUStudyHelper/notepage_md.cpp
+A	PKUStudyHelper/notepage_md.h
+A	PKUStudyHelper/notepage_md.ui
+A	PKUStudyHelper/notepage_text.cpp
+A	PKUStudyHelper/notepage_text.h
+A	PKUStudyHelper/notepage_text.ui
+A	PKUStudyHelper/register.cpp
+A	PKUStudyHelper/register.h
+A	PKUStudyHelper/register.ui
+A	PKUStudyHelper/setnewclass.cpp
+A	PKUStudyHelper/setnewclass.h
+A	PKUStudyHelper/setnewclass.ui

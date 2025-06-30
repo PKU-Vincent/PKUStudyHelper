@@ -2,6 +2,11 @@
     <qresource prefix="/new/prefix1">
         <file>西校门.jpg</file>
         <file>boyata.image</file>
+        <file>主页图标.jpg</file>
+        <file>任务图标.jpg</file>
+        <file>课程图标.jpg</file>
+        <file>笔记本背景.jpg</file>
+        <file>纸质背景.jpg</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

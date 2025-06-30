@@ -102,11 +102,13 @@ public:
 
         newcode = new QLineEdit(gridLayoutWidget);
         newcode->setObjectName("newcode");
+        newcode->setEchoMode(QLineEdit::EchoMode::Password);
 
         gridLayout->addWidget(newcode, 3, 1, 1, 1);
 
         confirmpassword = new QLineEdit(gridLayoutWidget);
         confirmpassword->setObjectName("confirmpassword");
+        confirmpassword->setEchoMode(QLineEdit::EchoMode::Password);
 
         gridLayout->addWidget(confirmpassword, 4, 1, 1, 1);
 

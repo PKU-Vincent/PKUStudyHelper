@@ -6,13 +6,17 @@
 #include <QMessageBox>
 #include <QListWidgetItem>
 #include <QMenu>
-#include<QList>
+#include <QList>
 #include <QAction>
-#include<QWidget>
-#include "Task.h"
-#include"classpage.h"
-#include"UserInfo.h"
-#include"CourseInfo.h"
+#include <QWidget>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSet>
+#include "MiniTaskPage.h"
+#include "classpage.h"
+#include "UserInfo.h"
+#include "TaskPage.h"
+#include "coursepagetemplate.h"
 
 extern User current_user;
 
@@ -43,58 +47,70 @@ void MainWindow::setupUI() {
     )");
 
     // 添加基本导航项
-    navList->addItem("我的主页");
-    navList->addItem("我的任务");
-    navList->addItem("我的课程");
-    connect(navList,&QListWidget::itemClicked,this,&MainWindow::on_item_clicked);
+    // 添加“我的主页”项并设置图标
+    QListWidgetItem *homeItem = new QListWidgetItem("我的主页");
+    QFont font1 = homeItem->font();
+    font1.setPointSize(14);
+    homeItem->setFont(font1);
+    homeItem->setIcon(QIcon(":/new/prefix1/主页图标.jpg"));
+    navList->addItem(homeItem);
+
+    // 添加“我的任务”项并设置图标
+    QListWidgetItem *taskItem = new QListWidgetItem("我的任务");
+    QFont font2 = taskItem->font();
+    font2.setPointSize(14);
+    taskItem->setFont(font2);
+    taskItem->setIcon(QIcon(":/new/prefix1/任务图标.jpg"));
+    navList->addItem(taskItem);
+
+    // 添加“我的课程”项并设置图标
+    QListWidgetItem *courseItem = new QListWidgetItem("我的课程");
+    QFont font3 = courseItem->font();
+    font3.setPointSize(14);
+    courseItem->setFont(font3);
+    courseItem->setIcon(QIcon(":/new/prefix1/课程图标.jpg"));
+    navList->addItem(courseItem);
+
+    connect(navList, &QListWidget::itemClicked, this, &MainWindow::on_item_clicked);
 
     // 页面切换区域
     stackedWidget = new QStackedWidget(this);
 
-    // 初始化任务数据
-    QList<task> tasks;
-    tasks.append(task("完成作业", "2024-05-31", true, "2024-06-02"));
-    tasks.append(task("阅读书籍", "2024-05-31", false));
-    tasks.append(task("提交报告", "2024-05-31", true, "2024-06-05"));
 
-    // 创建主页并传入任务数据
-    HomePage *homePage = new HomePage("小北", tasks, this);
+
+    HomePage *homePage = new HomePage(current_user.username, current_user.account, this);
     stackedWidget->addWidget(homePage); // index 0
 
-    // 创建其他页面
-    QWidget *taskPage = new QWidget(this);
-    QLabel *taskLabel = new QLabel("这是任务主页", taskPage);
-    QVBoxLayout *taskLayout = new QVBoxLayout(taskPage);
-    taskLayout->addWidget(taskLabel);
+    TaskPage *taskPage = new TaskPage(this, current_user.account);
     stackedWidget->addWidget(taskPage); // index 1
 
-    QWidget *coursepage=new QWidget(this);
-    QLabel *courseLabel=new QLabel("这是课程主页",coursepage);
-    stackedWidget->addWidget(coursepage);
+    ClassPage *classPage = new ClassPage(current_user.account);
+    stackedWidget->addWidget(classPage); // index 2
 
-    QJsonObject scheduleData=getScheduleFromPython(current_user.account,current_user.password);
-    if (scheduleData.contains("error")) {
-        qDebug() << "Login failed:" << scheduleData["error"].toString();
-        // 显示错误信息给用户
+    connect(taskPage,&TaskPage::tasksChanged,homePage,&HomePage::refreshTasks);
+    // 加载课程信息并添加课程主页页面
+    QSqlQuery query;
+    query.prepare("SELECT DISTINCT course_name FROM courses WHERE account = :account");
+    query.bindValue(":account", current_user.account);
+    if (!query.exec()) {
+        qDebug() << "加载课程列表失败：" << query.lastError().text();
     } else {
-        qDebug() << "Schedule data received:" << scheduleData;
+        QSet<QString> courseSet;
+        while (query.next()) {
+            QString courseName = query.value(0).toString();
+            if (!courseSet.contains(courseName)) {
+                courseSet.insert(courseName);
+                CoursePageTemplate *coursePage = new CoursePageTemplate(current_user.account, " "+courseName, this);
+                stackedWidget->addWidget(coursePage);
+                navList->addItem(courseName);  // 加入导航栏
+                connect(coursePage, &CoursePageTemplate::assignmentsChanged,
+                        taskPage, &TaskPage::refreshTasks);
+                connect(coursePage, &CoursePageTemplate::assignmentsChanged,
+                        homePage, &HomePage::refreshTasks);
+            }
+        }
     }
-    QVector<QMap<QString, QString>> scheduleEntries = jsonObjectToScheduleEntries(scheduleData);
-    ParsedScheduleResult result = parseAndCategorizeSchedule(scheduleEntries);
-    int number=result.name_index.size();
-    QList<QWidget*> coursewidgets;
-    for(int i=0;i<number;++i)
-    {
-        ClassPage* w=new ClassPage(this);
-        coursewidgets.append(w);
-        w->setCourseInfo(result.name_index[result.name_list[i]]);
-        stackedWidget->addWidget(w);//index i+2
-        QListWidgetItem *courseItem=new QListWidgetItem("   "+result.name_list[i]);
-        QFont addFont;
-        addFont.setPointSize(10);
-        courseItem->setFont(addFont);
-        navList->addItem(courseItem);
-    }
+
     navLayout->addWidget(navList);
     navLayout->addStretch();
     navWidget->setFixedWidth(180);
@@ -103,85 +119,14 @@ void MainWindow::setupUI() {
     mainLayout->addWidget(stackedWidget);
     mainLayout->setStretch(0, 0);
     mainLayout->setStretch(1, 1);
+
     setCentralWidget(central);
+
     navList->setCurrentRow(0);
-
 }
-
 
 void MainWindow::on_item_clicked(QListWidgetItem *item)
 {
-    int index=navList->row(item);
+    int index = navList->row(item);
     stackedWidget->setCurrentIndex(index);
-}
-
-QJsonObject MainWindow::getScheduleFromPython(const QString& studentId, const QString& password) {
-    QProcess process;
-    QString pythonExecutable = "python";  // 需确保 Python 已安装并在系统路径中
-    QString scriptPath = "pku_portal.py"; // Python 脚本路径
-
-    // 设置命令行参数
-    QStringList arguments;
-    arguments << scriptPath << studentId << password;
-
-    // 启动进程
-    process.start(pythonExecutable, arguments);
-    if (!process.waitForStarted()) {
-        qDebug() << "Error: Failed to start Python process:" << process.errorString();
-        return QJsonObject({{"error", "Failed to start Python process"}});
-    }
-
-    // 等待进程完成
-    if (!process.waitForFinished()) {
-        qDebug() << "Error: Python process timed out:" << process.errorString();
-        return QJsonObject({{"error", "Python process timed out"}});
-    }
-
-    // 获取标准输出和错误输出
-    QByteArray stdoutData = process.readAllStandardOutput();
-    QByteArray stderrData = process.readAllStandardError();
-
-    // 检查错误输出
-    if (!stderrData.isEmpty()) {
-        qDebug() << "Python error:" << QString::fromUtf8(stderrData);
-    }
-
-    // 解析 JSON 数据
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(stdoutData);
-    if (jsonDoc.isNull()) {
-        qDebug() << "Error: Failed to parse JSON:" << QString::fromUtf8(stdoutData);
-        return QJsonObject({{"error", "Failed to parse JSON"}});
-    }
-
-    return jsonDoc.object();
-}
-QVector<QMap<QString, QString>> MainWindow:: jsonObjectToScheduleEntries(const QJsonObject& jsonObj) {
-    QVector<QMap<QString, QString>> entries;
-
-    // 假设 JSON 数据是一个数组（例如 "course" 键对应数组）
-    if (jsonObj.contains("course") && jsonObj["course"].isArray()) {
-        QJsonArray courseArray = jsonObj["course"].toArray();
-
-        for (const QJsonValue& val : courseArray) {
-            if (val.isObject()) {
-                QJsonObject obj = val.toObject();
-                QMap<QString, QString> entry;
-
-                // 遍历 JSON 对象的键值对，假设键为 "mon", "tue" 等星期代码或其他字段
-                for (const QString& key : obj.keys()) {
-                    if (obj[key].isString()) {
-                        entry[key] = obj[key].toString();
-                    } else if (obj[key].isObject()) {
-                        // 处理嵌套对象（如有需要）
-                        QJsonObject subObj = obj[key].toObject();
-                        for (const QString& subKey : subObj.keys()) {
-                            entry[subKey] = subObj[subKey].toString();
-                        }
-                    }
-                }
-                entries.append(entry);
-            }
-        }
-    }
-    return entries;
 }

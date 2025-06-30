@@ -52,6 +52,7 @@ void LoginDialog::on_loginButton_clicked()
     query.bindValue(":account", account);
     if(!query.exec())
         return;
+    else{
         if (!query.next()) {
             // 没有找到该账号
             ui->label->setText("账号不存在");
@@ -75,6 +76,7 @@ void LoginDialog::on_loginButton_clicked()
                 ui->label->setStyleSheet("color:red;");
             }
         }
+    }
 }
 
 void LoginDialog::on_register_cancel()

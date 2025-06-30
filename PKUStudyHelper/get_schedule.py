@@ -1,6 +1,6 @@
 import sys
 import json
-from course import course 
+from course import Portal 
 
 def main():
     if len(sys.argv) < 3:

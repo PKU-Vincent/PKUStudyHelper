@@ -16,10 +16,10 @@
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>240</y>
+     <x>190</x>
+     <y>230</y>
      <width>195</width>
-     <height>80</height>
+     <height>61</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -43,7 +43,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>10</y>
+     <y>40</y>
      <width>391</width>
      <height>191</height>
     </rect>
@@ -96,17 +96,25 @@
      <widget class="QLineEdit" name="newaccount"/>
     </item>
     <item row="3" column="1">
-     <widget class="QLineEdit" name="newcode"/>
+     <widget class="QLineEdit" name="newcode">
+      <property name="echoMode">
+       <enum>QLineEdit::EchoMode::Password</enum>
+      </property>
+     </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QLineEdit" name="confirmpassword"/>
+     <widget class="QLineEdit" name="confirmpassword">
+      <property name="echoMode">
+       <enum>QLineEdit::EchoMode::Password</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
   <widget class="QLabel" name="message">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>230</x>
      <y>330</y>
      <width>281</width>
      <height>21</height>
@@ -114,6 +122,52 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QProgressBar" name="progressBar">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>290</y>
+     <width>461</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="value">
+    <number>24</number>
+   </property>
+   <property name="textVisible">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="statusLabel">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>320</y>
+     <width>301</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>10</y>
+     <width>481</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 7, 40);
+font: 700 10pt &quot;Microsoft YaHei UI&quot;;</string>
+   </property>
+   <property name="text">
+    <string>温馨提示：为了更好的体验，请您使用北大校内门户进行注册</string>
    </property>
   </widget>
  </widget>

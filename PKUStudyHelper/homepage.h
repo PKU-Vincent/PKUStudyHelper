@@ -3,40 +3,38 @@
 
 #include <QWidget>
 #include <QTextBrowser>
-#include <QPushButton>
-#include <QListWidget>
 #include <QTableWidget>
-#include <QTimer>
-#include "Task.h"
+#include <QListWidget>
+#include <QPushButton>
 
-class HomePage : public QWidget {
+#include "MiniTaskPage.h"
+class HomePage : public QWidget
+{
     Q_OBJECT
-
 public:
-    explicit HomePage(const QString& username, const QList<task>& tasks, QWidget *parent = nullptr);
+    explicit HomePage(const QString& username, const QString& account, QWidget *parent = nullptr);
 
 signals:
     void courseClicked(const QString& courseName);
 
-private slots:
-    void handleCourseClicked(QListWidgetItem* item);
-    void handleTaskFinished(QListWidgetItem* item);
-    void showContextMenu(const QPoint &pos);
-    void showDDLContextMenu(const QPoint &pos);
-    void updateDDLStatus();
+public slots:
+    void refreshTasks() { miniTaskPage->loadTasks(); }
 
 private:
+    QString userName;
+    QString userAccount;
+
+    QTextBrowser *greetingBrowser;
+
+    QTableWidget *courseTable;
+    QPushButton *viewScheduleButton;
+
+    MiniTaskPage *miniTaskPage;
+
     QString getGreetingText(const QString& username);
     QString getRandomQuote();
 
-    void setupTaskList(const QList<task>& tasks);
-    void setupDDLTable(const QList<task>& tasks);
-
-    QTextBrowser *greetingBrowser;
-    QPushButton *viewScheduleButton;
-    QListWidget *todayTasksList;
-    QTableWidget *ddlTable;
-    QList<task> allTasks;
+    void loadTodayCourses();
 };
 
 #endif // HOMEPAGE_H

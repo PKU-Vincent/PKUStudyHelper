@@ -2,10 +2,8 @@
 #define REGISTER_H
 
 #include <QDialog>
-#include"ui_Register.h"
-#include<QSqlDatabase>
-#include<QSqlQuery>
-#include<QSqlError>
+#include <QProgressBar>
+#include <QLabel>
 
 namespace Ui {
 class Register;
@@ -29,8 +27,9 @@ private slots:
 
 private:
     Ui::Register *ui;
-    QSqlDatabase db;
-    void openDatabase();
+    QProgressBar *progressBar;      // 进度条控件
+    QLabel *statusLabel;             // 状态标签
+    void resetUI();                  // 重置UI状态
 };
 
 #endif // REGISTER_H

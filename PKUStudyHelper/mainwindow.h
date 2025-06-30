@@ -4,13 +4,14 @@
 #include <QMainWindow>
 #include <QListWidget>
 #include <QStackedWidget>
-#include<QCoreApplication>
-#include<QProcess>
-#include<QJsonDocument>
-#include<QJsonObject>
-#include<QJsonArray>
-#include "Task.h"
-
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSet>
+#include "MiniTaskPage.h"
+#include "HomePage.h"
+#include "TaskPage.h"
+#include "classpage.h"
+#include "CoursePageTemplate.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,20 +21,19 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow(){};
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override = default;
 
 private slots:
     void on_item_clicked(QListWidgetItem *item);
+
 private:
     void setupUI();
-    Ui::MainWindow *ui;
-    QListWidget *navList;
-    QStackedWidget *stackedWidget;
-    QList<task> tasks;
-    void updateScheduleUI(QJsonObject scheduleData);
-    QJsonObject getScheduleFromPython(const QString& studentId, const QString& password);
-    QVector<QMap<QString, QString>> jsonObjectToScheduleEntries(const QJsonObject& jsonObj);
+
+    Ui::MainWindow *ui = nullptr;
+
+    QListWidget *navList = nullptr;
+    QStackedWidget *stackedWidget = nullptr;
 };
 
 #endif // MAINWINDOW_H
