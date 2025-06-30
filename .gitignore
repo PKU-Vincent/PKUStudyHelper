@@ -31,7 +31,7 @@ Makefile*
 *build-*
 *.qm
 *.prl
-
+build*/
 # Qt unit tests
 target_wrapper.*
 
@@ -52,3 +52,11 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+# 忽略所有 __pycache__ 文件夹
+__pycache__/
+
+# 忽略所有 Python 字节码缓存文件
+*.pyc
+*.pyo
+*.pyd
