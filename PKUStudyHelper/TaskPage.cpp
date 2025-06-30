@@ -166,7 +166,7 @@ TaskPage::TaskPage(QWidget *parent, const QString &account) : QWidget(parent), u
 }
 
 
-void TaskPage::addTask() {
+void TaskPage::addTask() {   //添加任务
     QString date = dateEdit->date().toString("yyyy-MM-dd");
     QString name = nameEdit->text();
     if (date.isEmpty() || name.isEmpty()) return;
@@ -195,7 +195,7 @@ void TaskPage::addTask() {
     loadTasks();
 }
 
-void TaskPage::loadTasks() {
+void TaskPage::loadTasks() {  //加载任务
     taskList->clear();
     dateEdit->setDate(QDate::currentDate());
     nameEdit->clear();
@@ -256,7 +256,7 @@ void TaskPage::loadTasks() {
     }
 }
 
-void TaskPage::saveTasks(const QJsonArray &array) {
+void TaskPage::saveTasks(const QJsonArray &array) {  //储存任务
     QSqlQuery query;
     query.prepare("UPDATE user SET json_tasks_content = :json WHERE account = :account");
     query.bindValue(":json", QString(QJsonDocument(array).toJson()));
@@ -277,7 +277,7 @@ void TaskPage::showContextMenu(const QPoint &pos) {
     else if (selected == deleteAction) deleteTask();
 }
 
-void TaskPage::markTaskDone() {
+void TaskPage::markTaskDone() {   //标记任务已完成
     int row = taskList->currentRow();
     if (row < 0) return;
 
@@ -308,7 +308,7 @@ void TaskPage::markTaskDone() {
     }
 }
 
-void TaskPage::deleteTask() {
+void TaskPage::deleteTask() {   //删除任务
     int row = taskList->currentRow();
     if (row < 0) return;
 
@@ -337,7 +337,7 @@ void TaskPage::deleteTask() {
     }
 }
 
-QJsonArray TaskPage::getSortedTasks(const QJsonArray &array) {
+QJsonArray TaskPage::getSortedTasks(const QJsonArray &array) {   //将任务按截止日期排序
     QList<QJsonObject> list;
     for (const QJsonValue &val : array) list.append(val.toObject());
 
@@ -352,7 +352,7 @@ QJsonArray TaskPage::getSortedTasks(const QJsonArray &array) {
     return result;
 }
 
-QString TaskPage::deadlineStatus(const QDate &date) {
+QString TaskPage::deadlineStatus(const QDate &date) {   //将任务按截止日期分类
     int days = QDate::currentDate().daysTo(date);
     if (days == 0) return "今天截止 ⚠";
     else if (days > 0 && days <= 3) return "三天内截止";

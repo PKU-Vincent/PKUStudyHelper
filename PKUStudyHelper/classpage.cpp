@@ -117,7 +117,7 @@ QString ClassPage::weekdayToString(int weekday)
     return weekNames.value(weekday - 1, "未知");
 }
 
-void ClassPage::loadCourseTable()
+void ClassPage::loadCourseTable() //加载课表
 {
     courseTable->clearContents();
     QSqlQuery query;
@@ -142,12 +142,12 @@ void ClassPage::loadCourseTable()
         QTableWidgetItem *item = new QTableWidgetItem(text);
         item->setTextAlignment(Qt::AlignCenter);
         courseTable->setItem(row, col, item);
-    }
+    }                                               //从courses表中获取信息
 
     mergeCourseCells();
 }
 
-void ClassPage::mergeCourseCells()
+void ClassPage::mergeCourseCells()   //合并单元格
 {
     for (int col = 0; col < courseTable->columnCount(); ++col) {
         int startRow = 0;
@@ -180,13 +180,13 @@ void ClassPage::mergeCourseCells()
     }
 }
 
-void ClassPage::loadExamList()
+void ClassPage::loadExamList()   //加载考试时间轴
 {
     examListWidget->clear();
 
     QSqlQuery query;
     query.prepare("SELECT id, course_name, exam_date, start_time, end_time, location "
-                  "FROM exams WHERE account = :account ORDER BY exam_date ASC, start_time ASC");
+                  "FROM exams WHERE account = :account ORDER BY exam_date ASC, start_time ASC"); //从考试表中加载信息
     query.bindValue(":account", userAccount);
     if (!query.exec()) {
         qDebug() << "加载考试失败：" << query.lastError().text();
@@ -236,7 +236,7 @@ void ClassPage::onAddExamClicked()
     showAddExamDialog();
 }
 
-void ClassPage::showAddExamDialog()
+void ClassPage::showAddExamDialog()  //设计添加考试的窗口
 {
     QDialog dialog(this);
     dialog.setWindowTitle("添加考试");
@@ -286,7 +286,7 @@ void ClassPage::showAddExamDialog()
     if (dialog.exec() == QDialog::Accepted) {
         QString loc = building->currentText() + room->text().trimmed();
         QSqlQuery insert;
-        insert.prepare("INSERT INTO exams (account, course_name, exam_date, start_time, end_time, location) "
+        insert.prepare("INSERT INTO exams (account, course_name, exam_date, start_time, end_time, location) "  //尝试将考试信息插入考试表中储存起来
                        "VALUES (:account, :course, :date, :start, :end, :loc)");
         insert.bindValue(":account", userAccount);
         insert.bindValue(":course", courseCombo->currentText());
@@ -302,7 +302,7 @@ void ClassPage::showAddExamDialog()
     }
 }
 
-void ClassPage::onExamItemContextMenuRequested(const QPoint &pos)
+void ClassPage::onExamItemContextMenuRequested(const QPoint &pos)  //删除考试
 {
     QListWidgetItem *item = examListWidget->itemAt(pos);
     if (!item) return;

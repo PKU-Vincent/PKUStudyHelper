@@ -38,7 +38,7 @@ void LoginDialog::on_registerButton_clicked()
     registerWindow.exec();
 }
 
-void LoginDialog::on_loginButton_clicked()
+void LoginDialog::on_loginButton_clicked()  //点击登录按钮，触发检查机制
 {
     QString account=ui->account->text();
     QString password=ui->password->text();

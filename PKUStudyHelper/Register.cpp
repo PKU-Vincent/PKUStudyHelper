@@ -24,7 +24,7 @@ Register::~Register()
     delete ui;
 }
 
-void Register::on_confirmButton_clicked()
+void Register::on_confirmButton_clicked()   //点击注册按钮，触发检查机制
 {
     QString username = ui->newname->text();
     QString account = ui->newaccount->text();

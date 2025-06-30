@@ -13,7 +13,7 @@ QJsonDocument callPythonScript(const QString& functionName,
                                bool verifySSL = true) {
     QProcess process;
     QString python = "python";
-    QString scriptPath = "C:/Users/胡文彬/PKUStudyHelper/PKUStudyHelper/new_course.py";
+    QString scriptPath = "new_course.py";  //运行的时候切换成实际的路径
 
 #ifdef Q_OS_WIN
     python = "python.exe";

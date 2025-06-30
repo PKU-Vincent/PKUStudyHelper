@@ -33,7 +33,7 @@ CoursePageTemplate::CoursePageTemplate(const QString& userAccount, const QString
         this->setPalette(globalPalette);
         this->setAutoFillBackground(true);
     }
-
+    //设置课程主页标题
     QLabel *titleLabel = new QLabel(courseName, this);
     titleLabel->setAlignment(Qt::AlignCenter);
     titleLabel->setStyleSheet("font-size: 24px; font-weight: bold; color: #333;");
@@ -42,6 +42,7 @@ CoursePageTemplate::CoursePageTemplate(const QString& userAccount, const QString
     QHBoxLayout *middleLayout = new QHBoxLayout;
     mainLayout->addLayout(middleLayout);
 
+    //设置课程信息和备忘录栏
     courseInfoEdit = new QTextEdit(this);
     courseInfoEdit->setReadOnly(true);
     courseInfoEdit->setPlaceholderText("课程信息");
@@ -73,6 +74,7 @@ CoursePageTemplate::CoursePageTemplate(const QString& userAccount, const QString
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     mainLayout->addLayout(bottomLayout);
 
+    //设置作业管理窗口
     addAssignmentBtn = new QPushButton("添加作业", this);
     addAssignmentBtn->setStyleSheet(R"(
         QPushButton {
@@ -107,7 +109,7 @@ CoursePageTemplate::CoursePageTemplate(const QString& userAccount, const QString
 }
 
 void CoursePageTemplate::loadCourseInfo() {
-    qDebug() << "加载课程信息：" << userAccount << courseName;
+    qDebug() << "加载课程信息：" << userAccount << courseName;   //加载课程信息
 
     QSqlQuery query;
     query.prepare("SELECT teacher, remark, exam_info FROM courses WHERE account = :account AND course_name = :course_name LIMIT 1");
@@ -129,7 +131,7 @@ void CoursePageTemplate::loadCourseInfo() {
         qDebug() << "没有查到对应课程信息！";
     }
 }
-void CoursePageTemplate::loadAssignments() {
+void CoursePageTemplate::loadAssignments() {   //加载作业
     assignments.clear();
     QSqlQuery query;
     query.prepare("SELECT id, content, deadline, done FROM assignments WHERE account = :account AND course_name = :course_name");
@@ -149,7 +151,7 @@ void CoursePageTemplate::loadAssignments() {
     refreshAssignmentList();
 }
 
-void CoursePageTemplate::loadMemo() {
+void CoursePageTemplate::loadMemo() {   //加载备忘录
     QSqlQuery query;
     query.prepare("SELECT course_memo FROM user WHERE account = :account");
     query.bindValue(":account", userAccount);
@@ -158,7 +160,7 @@ void CoursePageTemplate::loadMemo() {
     }
 }
 
-void CoursePageTemplate::refreshAssignmentList() {
+void CoursePageTemplate::refreshAssignmentList() {  //更新作业
     assignmentListWidget->clear();
     std::sort(assignments.begin(), assignments.end(), [](const Assignment &a, const Assignment &b) {
         return a.deadline < b.deadline;
@@ -174,7 +176,7 @@ void CoursePageTemplate::refreshAssignmentList() {
     }
 }
 
-void CoursePageTemplate::onAssignmentContextMenuRequested(const QPoint &pos) {
+void CoursePageTemplate::onAssignmentContextMenuRequested(const QPoint &pos) {  //右键设置
     QListWidgetItem *item = assignmentListWidget->itemAt(pos);
     if (!item) return;
     QMenu menu(this);
@@ -183,7 +185,7 @@ void CoursePageTemplate::onAssignmentContextMenuRequested(const QPoint &pos) {
     menu.exec(assignmentListWidget->mapToGlobal(pos));
 }
 
-void CoursePageTemplate::onMarkAssignmentDone() {
+void CoursePageTemplate::onMarkAssignmentDone() {   //点击已完成后
     QListWidgetItem *item = assignmentListWidget->currentItem();
     if (!item) return;
     int id = item->data(Qt::UserRole).toInt();
@@ -201,7 +203,7 @@ void CoursePageTemplate::onMarkAssignmentDone() {
     emit assignmentsChanged();
 }
 
-void CoursePageTemplate::onDeleteAssignment() {
+void CoursePageTemplate::onDeleteAssignment() {  //点击删除后
     QListWidgetItem *item = assignmentListWidget->currentItem();
     if (!item) return;
     int id = item->data(Qt::UserRole).toInt();
@@ -235,7 +237,7 @@ void CoursePageTemplate::saveMemo() {
     query.exec();
 }
 
-void CoursePageTemplate::onAddAssignmentClicked() {
+void CoursePageTemplate::onAddAssignmentClicked() {  //添加作业
     QDialog dialog(this);
     dialog.setWindowTitle("添加作业");
     QFormLayout *formLayout = new QFormLayout(&dialog);
@@ -308,6 +310,6 @@ void CoursePageTemplate::onAddAssignmentClicked() {
         }
 
         refreshAssignmentList();
-        emit assignmentsChanged();
+        emit assignmentsChanged();   //传输信号，方便同步任务的信息
     }
 }

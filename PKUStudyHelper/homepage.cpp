@@ -134,7 +134,7 @@ HomePage::HomePage(const QString& username, const QString& account, QWidget *par
     loadTodayCourses();
 }
 
-QString HomePage::getGreetingText(const QString& username)
+QString HomePage::getGreetingText(const QString& username)  //根据时间获得对应的问候语
 {
     QTime currentTime = QTime::currentTime();
     QString greeting;
@@ -148,7 +148,7 @@ QString HomePage::getGreetingText(const QString& username)
     return greeting +  "！";
 }
 
-QString HomePage::getRandomQuote()
+QString HomePage::getRandomQuote()  //随机获得一句心灵鸡汤
 {
     QStringList quotes = {
         "又是美好的一天，加油！",
@@ -166,7 +166,7 @@ QString HomePage::getRandomQuote()
     return quotes.at(index);
 }
 
-void HomePage::loadTodayCourses()
+void HomePage::loadTodayCourses()  //加载今日课程
 {
     static const QList<QPair<QTime, QTime>> periodRanges = {
         {QTime(8, 0), QTime(8, 50)},

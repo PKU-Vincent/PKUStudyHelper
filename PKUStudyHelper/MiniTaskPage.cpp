@@ -19,7 +19,7 @@ MiniTaskPage::MiniTaskPage(QWidget *parent, const QString &account)
     loadTasks();
 }
 
-void MiniTaskPage::loadTasks()
+void MiniTaskPage::loadTasks()  //加载任务
 {
     taskList->clear();
 
@@ -78,7 +78,7 @@ void MiniTaskPage::loadTasks()
     }
 }
 
-void MiniTaskPage::saveTasks(const QJsonArray &array)
+void MiniTaskPage::saveTasks(const QJsonArray &array)   //利用数据库储存任务
 {
     QSqlQuery query;
     query.prepare("UPDATE user SET json_tasks_content = :json WHERE account = :account");
@@ -101,7 +101,7 @@ void MiniTaskPage::showContextMenu(const QPoint &pos)
     else if (selected == deleteAction) deleteTask();
 }
 
-void MiniTaskPage::markTaskDone()
+void MiniTaskPage::markTaskDone()   //标记已完成
 {
     int row = taskList->currentRow();
     if (row < 0) return;
@@ -133,7 +133,7 @@ void MiniTaskPage::markTaskDone()
     }
 }
 
-void MiniTaskPage::deleteTask()
+void MiniTaskPage::deleteTask()   //选择删除
 {
     int row = taskList->currentRow();
     if (row < 0) return;
@@ -163,7 +163,7 @@ void MiniTaskPage::deleteTask()
     }
 }
 
-QJsonArray MiniTaskPage::getSortedTasks(const QJsonArray &array)
+QJsonArray MiniTaskPage::getSortedTasks(const QJsonArray &array)   //将任务按照截止日期排序
 {
     QList<QJsonObject> list;
     for (const QJsonValue &val : array) list.append(val.toObject());
@@ -179,7 +179,7 @@ QJsonArray MiniTaskPage::getSortedTasks(const QJsonArray &array)
     return result;
 }
 
-QString MiniTaskPage::deadlineStatus(const QDate &date)
+QString MiniTaskPage::deadlineStatus(const QDate &date)  //将不同的任务分类
 {
     int days = QDate::currentDate().daysTo(date);
     if (days == 0) return "今天截止 ⚠";

@@ -23,6 +23,8 @@ void createDatabase()
                                    "account NTEXT UNIQUE NOT NULL,"
                                    "password NTEXT NOT NULL"
                                    ")");
+
+    //创建courses表
     QString courseTableSql = QString(
         "CREATE TABLE IF NOT EXISTS courses ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -35,6 +37,8 @@ void createDatabase()
         "remark TEXT,"
         "exam_info TEXT"
         ")");
+
+    //创建exams表
     QString examTableSql = QString(
         "CREATE TABLE IF NOT EXISTS exams ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -54,17 +58,18 @@ void createDatabase()
         "deadline TEXT NOT NULL,"
         "done INTEGER DEFAULT 0"
         ")");
+
     QSqlQuery userQuery;
     if (!userQuery.exec(userTableSql)) {
         qDebug() << "user table creation error";
     } else {
         qDebug() << "user table creation success";
     }
+
     // 开发阶段先删除旧表（可选）
     QSqlQuery().exec("DROP TABLE IF EXISTS courses");
     QSqlQuery().exec("DROP TABLE IF EXISTS exams");
 
-    // 创建课程表
     QSqlQuery createQuery;
     if (!createQuery.exec(courseTableSql)) {
         qDebug() << "创建课程表失败：" << createQuery.lastError().text();
@@ -82,7 +87,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     createDatabase();
-    QSqlQuery query;
+    /*QSqlQuery query;
     QString account="2400013320";
     query.prepare("DELETE FROM user WHERE account=:account");
     query.bindValue(":account",account);
@@ -92,12 +97,12 @@ int main(int argc, char *argv[])
     else
     {
         qDebug() << "";
-    }
+    }*/                         //利用门户账号测试过程中用于调试的代码
     LoginDialog loginDialog;
     int result=loginDialog.exec();
     if(result==QDialog::Accepted){
         QSqlQuery query;
-        query.exec("ALTER TABLE user ADD COLUMN json_tasks_content TEXT");
+        query.exec("ALTER TABLE user ADD COLUMN json_tasks_content TEXT");   //创建任务表
         MainWindow w;
         w.show();
         return a.exec();
